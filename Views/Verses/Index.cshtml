@@ -1,0 +1,113 @@
+﻿@model EMF.Models.Rootobject
+
+
+@{
+    ViewData["Title"] = "KLove Verse of the Day";
+}
+
+<img src="~/images/klove.png" />
+
+<div>
+    <h4>Verses for @ViewData["verseDate"]</h4>
+    <hr />
+    <br />
+
+    <table class="table table-striped table-bordered" id="assets-data-table">
+        <thead>
+            <tr>
+                <th style="display:none">
+                    ID
+                </th>
+                <th>
+                    Verse
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.Verses)
+            {
+                <tr>
+                    <td style="display:none">
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VerseText)
+                    </td>
+                    <td>
+                        <a href='#' onclick='saveToFavorites(`@item.Id`,`@item.VerseText`);'>Save to Favorites</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    @section Scripts
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                // $('#assets-data-table').DataTable();
+
+            });
+        </script>
+    }
+
+
+
+    <script type="text/javascript">
+
+        function saveToFavorites(id, vt) {
+
+            $.ajax('/Favorites/SaveToFavorites',
+                {
+                    data: { id: id, verse: vt },
+                    dataType: 'json', // type of response data
+                    // timeout: 5000,     // timeout milliseconds
+                    success: function (data, status, xhr) {
+                        if (data) {
+                            $.confirm({
+                                title: 'Success',
+                                content: 'Saved to your favorites',
+                                type: 'green',
+                                typeAnimated: true,
+                                buttons: {
+                                    close: function () {
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            $.confirm({
+                                title: 'Alert',
+                                content: 'This verse is already in your favorites',
+                                type: 'red',
+                                typeAnimated: true,
+                                buttons: {
+                                    close: function () {
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) { // error callback
+                        $.confirm({
+                            title: 'Error',
+                            content: errorMessage,
+                            type: 'red',
+                            typeAnimated: true,
+                            buttons: {
+                                close: function () {
+                                }
+                            }
+                        });
+                    }
+                });
+
+        }
+
+
+    </script>
+

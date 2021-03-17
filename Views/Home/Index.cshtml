@@ -1,0 +1,58 @@
+﻿@model EMF.Models.InputDataModel
+@{
+    ViewData["Title"] = "KLove Verse of the Day";
+}
+
+<div class="text-center">
+    
+    <img src="~/images/klove.png" /> 
+    <br /> 
+    Verse of the Day
+    <br /><br />
+
+    <style>
+        .inputTable {
+            width: 800px;
+        }
+        
+    </style>
+
+    <br /><br />
+
+    @using (Html.BeginForm("Index", "Verses", FormMethod.Post))
+    {
+        <table class="inputTable" border="0">
+            <tr>
+                <td align="left">
+                    @Html.LabelFor(m => m.StartDate, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>                    
+                    @Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", style = "width:250px" })
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr style="height:10px"></tr>
+            <tr>
+                <td align="left">
+                    @Html.LabelFor(m => m.NumVerses, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td align="left">
+                    @Html.DropDownListFor(m => m.NumVerses, Enumerable.Range(1, 10).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }))
+
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(m => m.NumVerses, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+        </table>
+        <br />
+        <br />
+        <button type="submit" class="btn btn-success submit">Submit</button>
+
+    }
+    <br />
+    @Html.ActionLink("My Favorites", "Index", "Favorites")
+
+
